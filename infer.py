@@ -7,6 +7,7 @@ model_name = "aeeg_yolov8n_50e16"
 
 model = YOLO("runs/detect/{}/weights/best.pt".format(model_name))
 result_save_root = "prediction_results"
+os.makedirs(result_save_root, exist_ok=True)
 save_folder = os.path.join(result_save_root, model_name)
 os.makedirs(save_folder, exist_ok=True)
 
