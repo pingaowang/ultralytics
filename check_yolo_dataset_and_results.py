@@ -4,10 +4,13 @@ import pickle
 from utils.load_coco_form import load_coco_annotations_as_coords
 
 # ! Change here, for a different model's predictions.
-prediction_pkl_folder = "prediction_results/aeeg_yolov8n_50e16"
+# prediction_pkl_folder = "prediction_results/aeeg_yolov8n_OnlyEpi_Adam_lr1e-3_wd1e-4"
+# prediction_pkl_folder = "prediction_results/aeeg_yolov8n_OnlyInter_Adam_lr1e-3_wd1e-42"
+prediction_pkl_folder = "prediction_results/aeeg_yolov8n_OnlyInter_fromOfficialPretrain_v1"
 
 # root info, never change.
-yolo_dataset_root = "/home/pingao/projects/datasets/dataset_yolo"
+# yolo_dataset_root = "dataset_yolo_epi"
+yolo_dataset_root = "dataset_yolo"
 vis_save_root = "pred_and_label_vis"
 
 # makedir vis image saving folder
@@ -32,6 +35,18 @@ for i_aeeg in range(len(test_image_paths)):
 
     # load image
     aeeg_image = Image.open(image_path)
+
+    # 获取图片的宽度和高度
+    width, height = aeeg_image.size
+
+    # 计算上半部分的区域
+    upper_half = (0, 0, width, height // 2)
+
+    # 裁剪上半部分
+    upper_img = aeeg_image.crop(upper_half)
+
+    # 粘贴到下半部分
+    aeeg_image.paste(upper_img, (0, height // 2))
 
     # load
     aeeg_label = load_coco_annotations_as_coords(file_path=label_path, image_h=1920, image_w=1920)
@@ -58,17 +73,17 @@ for i_aeeg in range(len(test_image_paths)):
         class_id = prediction[0]
         coords = (
             prediction[1],
-            prediction[2],
+            prediction[2] + height // 2,
             prediction[3],
-            prediction[4]
+            prediction[4] + height // 2
         )
         conf = prediction[5]
 
         if class_id == 0:
-            draw.rectangle(coords, outline='purple', width=2)
+            draw.rectangle(coords, outline='red', width=2)
         elif class_id == 1:
-            draw.rectangle(coords, outline='green', width=2)
-        draw.text((coords[0], coords[1]), "{:.2f}".format(conf), font=fnt, fill='black')
+            draw.rectangle(coords, outline='blue', width=2)
+        draw.text((coords[0], coords[3] - 20), "{:.2f}".format(conf), font=fnt, fill='black')
 
     # Save the drawn image
     aeeg_image.save(

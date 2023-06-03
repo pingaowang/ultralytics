@@ -3,7 +3,9 @@ import pickle
 from ultralytics import YOLO
 
 
-model_name = "aeeg_yolov8n_50e16"
+# model_name = "aeeg_yolov8n_OnlyEpi_Adam_lr1e-3_wd1e-4"
+# model_name = "aeeg_yolov8n_OnlyInter_Adam_lr1e-3_wd1e-42"
+model_name = "aeeg_yolov8n_OnlyInter_fromOfficialPretrain_v1"
 
 model = YOLO("runs/detect/{}/weights/best.pt".format(model_name))
 result_save_root = "prediction_results"
@@ -11,7 +13,7 @@ os.makedirs(result_save_root, exist_ok=True)
 save_folder = os.path.join(result_save_root, model_name)
 os.makedirs(save_folder, exist_ok=True)
 
-test_image_paths = [os.path.join("dataset_yolo/images/test", x) for x in os.listdir("dataset_yolo/images/test")]
+test_image_paths = [os.path.join("dataset_yolo_epi/images/test", x) for x in os.listdir("dataset_yolo_epi/images/test")]
 for image_path in test_image_paths:
     image_name = os.path.basename(image_path)
     save_path = os.path.join(save_folder, image_name.split('.')[0] + ".pkl")
