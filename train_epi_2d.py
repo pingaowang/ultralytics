@@ -2,7 +2,7 @@ from ultralytics import YOLO
 
 # 加载模型
 model = YOLO("yolov8n.yaml")  # Scratch
-# model = YOLO("yolov8n.pt")  # official pre-trained
+model = YOLO("yolov8n.pt")  # official pre-trained
 # model = YOLO("runs/detect/aeeg_yolov8n_50e8/weights/best.pt")  # check-point 1
 # model = YOLO("runs/detect/aeeg_yolov8n_50e12/weights/best.pt")  # check-point 2
 # model = YOLO("runs/detect/aeeg_yolov8n_50e14/weights/best.pt")  # check-point 3
@@ -23,19 +23,19 @@ results = model.train(
    patience=1000,
    optimizer="Adam",
    cache=True,
-   batch=1,
+   batch=4,
    cos_lr=True,
    name='aeeg_2d_onlyEpi',
-   lr0=1.0e-04,
+   lr0=1.0e-03,
    lrf=0.2,
    weight_decay=1.0e-04,
    warmup_epochs=0.0,
-   hsv_h=0,
-   hsv_s=0,
-   hsv_v=0,
+   hsv_h=0.01,
+   hsv_s=0.01,
+   hsv_v=0.01,
    # translate=0,
    # scale=0,
-   fliplr=0,
+   fliplr=0.5,
    mosaic=1,
    mixup=0.2,
    # perspective=0.1,
