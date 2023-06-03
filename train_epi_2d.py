@@ -13,6 +13,7 @@ model = YOLO("yolov8n.pt")  # official pre-trained
 # model = YOLO("runs/detect/aeeg_yolov8n_OnlyInter_Adam_lr1e-3_wd1e-4/weights/best.pt")  # check-point inter-2
 # model = YOLO("runs/detect/aeeg_yolov8n_OnlyInter_Adam_lr1e-3_wd1e-42/weights/best.pt")  # check-point inter-3
 # model = YOLO("runs/detect/aeeg_yolov8n_OnlyInter_Adam_lr1e-3_wd1e-43/weights/best.pt")  # check-point inter-4
+model = YOLO("runs/detect/aeeg_2d_onlyEpi/weights/best.pt")  # check-point 2d only-epi 1
 
 results = model.train(
    data='aeeg_epi_2d_v1.yaml',
@@ -23,12 +24,12 @@ results = model.train(
    patience=1000,
    optimizer="Adam",
    cache=True,
-   batch=2,
+   batch=3,
    cos_lr=True,
    name='aeeg_2d_onlyEpi',
-   lr0=1.0e-03,
+   lr0=1.0e-04,
    lrf=0.2,
-   weight_decay=1.0e-04,
+   weight_decay=1.0e-05,
    warmup_epochs=0.0,
    hsv_h=0.01,
    hsv_s=0.01,
@@ -36,10 +37,11 @@ results = model.train(
    # translate=0,
    # scale=0,
    fliplr=0.5,
+   flipud=0.5,
    mosaic=1,
    mixup=0.2,
    # perspective=0.1,
-   # degrees=0.1
+   degrees=5
    # dropout=0.9
 )
 
